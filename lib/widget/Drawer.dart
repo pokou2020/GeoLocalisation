@@ -1,235 +1,267 @@
+
+
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class HiddenDrawerController {
-  HiddenDrawerController({this.items, @required DrawerContent initialPage}) {
-    this.page = initialPage;
-  }
-  List<DrawerItem> items;
-  Function open;
-  Function close;
-  DrawerContent page;
+class Drawers extends StatefulWidget {
+  Drawers({Key key}) : super(key: key);
+  @override
+  _DrawersState createState() => _DrawersState();
 }
 
-class DrawerContent extends StatefulWidget {
-  Function onMenuPressed;
-  State<StatefulWidget> createState() {
-    return null;
-  }
-}
-
-class DrawerItem extends StatelessWidget {
-  DrawerItem({this.onPressed, this.icon, this.text, this.page});
-  Function onPressed;
-  final Widget icon;
-  final Widget text;
-
-  final DrawerContent page;
-
+class _DrawersState extends State<Drawers> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 2),
-      child: Material(
-        color: Colors.transparent,
-        child: GestureDetector(
-          onTap: onPressed,
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0),
-            child: Row(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(left: 16, right: 8),
-                  child: icon,
+    return SafeArea(
+      child: ClipPath(
+        child: Container(
+          width: 240,
+          child: Stack(
+            children: [
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                child: Container(
+                  decoration:
+                      BoxDecoration(color: Colors.white.withOpacity(0.5)),
                 ),
-                text
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class HiddenDrawer extends StatefulWidget {
-  HiddenDrawer({this.header, this.decoration, this.controller});
-  BoxDecoration decoration;
-  Widget header;
-  HiddenDrawerController controller;
-  @override
-  _HiddenDrawerState createState() => _HiddenDrawerState();
-}
-
-class _HiddenDrawerState extends State<HiddenDrawer>
-    with TickerProviderStateMixin {
-  bool isMenuOpen = false;
-  bool isMenudragging = false;
-  Animation<double> animation, scaleAnimation;
-  Animation<BorderRadius> radiusAnimation;
-  AnimationController animationController;
-
-  @override
-  void initState() {
-    super.initState();
-    animationController =
-        AnimationController(vsync: this, duration: Duration(microseconds: 300));
-    animation = Tween<double>(begin: 0.0, end: 1.0).animate(animationController)
-      ..addListener(() {
-        setState(() {});
-      });
-    scaleAnimation =
-        Tween<double>(begin: 1.0, end: 0.86).animate(animationController);
-    radiusAnimation = BorderRadiusTween(
-            begin: BorderRadius.circular(0.0), end: BorderRadius.circular(32))
-        .animate(
-            CurvedAnimation(parent: animationController, curve: Curves.ease));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    animationController.dispose();
-  }
-
-  drawerItems() {
-    return widget.controller.items.map((DrawerItem item) {
-      if (item.onPressed == null) {
-        item.onPressed = () {
-          widget.controller.page = item.page;
-          widget.controller.close();
-        };
-      }
-      item.page.onMenuPressed = menuPress;
-      return item;
-    }).toList();
-  }
-
-  menuPress() {
-    isMenuOpen ? closeDrawer() : openDrawer();
-  }
-
-  closeDrawer() {
-    animationController.reverse();
-    setState(() {
-      isMenuOpen = false;
-    });
-  }
-
-  openDrawer() {
-    animationController.forward();
-    setState(() {
-      isMenuOpen = true;
-    });
-  }
-
-  animations() {
-    if (isMenudragging) {
-      var opened = false;
-      setState(() {
-        isMenudragging = false;
-      });
-      if (animationController.value >= 0.4) {
-        animationController.forward();
-        opened = true;
-      } else {
-        animationController.reverse();
-      }
-      setState(() {
-        isMenuOpen = opened;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    widget.controller.page.onMenuPressed = menuPress;
-    widget.controller.close = closeDrawer;
-    widget.controller.open = openDrawer;
-    return Listener(
-      onPointerDown: (PointerDownEvent event) {
-        if (isMenuOpen &&
-            event.position.dx / MediaQuery.of(context).size.width >= 0.66) {
-          closeDrawer();
-        } else {
-          setState(() {
-            isMenudragging = (!isMenudragging && event.position.dx <= 8.0);
-          });
-        }
-      },
-      onPointerMove: (PointerMoveEvent event) {
-        if (isMenudragging) {
-          animationController.value =
-              event.position.dx / MediaQuery.of(context).size.width;
-        }
-      },
-      onPointerUp: (PointerUpEvent event) {
-        animations();
-      },
-      onPointerCancel: (PointerCancelEvent event) {
-        animations();
-      },
-      child: Stack(
-        children: <Widget>[
-          Container(
-            decoration: widget.decoration,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 64.0),
-              child: ListView(
-                children: <Widget>[
-                  Container(
-                    child: widget.header,
-                  ),
-                  SizedBox(
-                    height: 60,
-                  ),
-                  Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: drawerItems())
-                ],
               ),
-            ),
-          ),
-          Transform.scale(
-            scale: scaleAnimation.value,
-            child: Transform.translate(
-                offset: Offset(
-                    MediaQuery.of(context).size.width * 0.66 * animation.value,
-                    0.0),
-                child: AbsorbPointer(
-                  absorbing: isMenuOpen,
-                  child: Stack(
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 32),
-                              child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(44)),
-                                child: Container(
-                                  color: Colors.white.withAlpha(128),
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).pushNamed("profil");
+                      },
+                      child: Center(
+                        child:  CircleAvatar(
+                          radius: 50,
+                          backgroundImage: AssetImage('images/nove1.jpg'),
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Container(
+                        child: Text(
+                          "Username",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+               
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Divider(
+                      color: Colors.black,
+                      endIndent: 80,
+                      indent: 80,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+              
+                
+                    // ListTile(
+                    //   title: Text(
+                    //     "Mes telechargement",
+                    //     style: TextStyle(
+                    //       color: Colors.white,
+                    //       fontSize: 12,
+                    //     ),
+                    //   ),
+                    //   leading: IconButton(
+                    //     icon: FaIcon(
+                    //       FontAwesomeIcons.download,
+                    //       color: Colors.red,
+                    //       size: 20,
+                    //     ),
+                    //     onPressed: () {},
+                    //   ),
+                    // ),
+                    // 
+                       InkWell(
+                         onTap: (){
+                           Navigator.of(context).pushNamed("profil");
+                         },
+                         child: ListTile(
+                      title: Text(
+                          "Mon profil",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                          ),
+                      ),
+                      leading: IconButton(
+                          icon: FaIcon(
+                            FontAwesomeIcons.personBooth,
+                            color: Colors.red,
+                            size: 20,
+                          ),
+                          onPressed: () {},
+                      ),
+                    ),
+                       ),
+                        InkWell(
+                      onTap: (){
+                        Navigator.of(context).pushNamed("Notification");
+                      },
+                      child: ListTile(
+                        title: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: Text(
+                                  "Notification",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 12,
+                                  ),
                                 ),
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: animation.value * 16),
-                        child: ClipRRect(
-                          borderRadius: radiusAnimation.value,
-                          child: Container(
-                            color: Colors.white,
-                            child: widget.controller.page,
+                              Container(
+                                child: CircleAvatar(
+                                  minRadius: 4,
+                                  backgroundColor: Colors.green,
+                                  child: Text("3",
+                                  style: TextStyle(
+                                   color: Colors.black,
+                                    fontSize: 7
+                                  ),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
-                      )
-                    ],
-                  ),
-                )),
-          )
-        ],
+                        leading: IconButton(
+                          icon: Icon(Icons.notifications_active,
+                           color: Colors.red,
+                            size: 20,
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: (){
+                        Navigator.of(context).pushNamed("Abonement1");
+                      },
+                      child: ListTile(
+                        title: Container(
+                          child: Row(
+                            children: [
+                              Text(
+                                "Abonnement",
+                                style: TextStyle(
+                                 color: Colors.black,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        leading: IconButton(
+                          icon: FaIcon(
+                            FontAwesomeIcons.moneyBill,
+                            color: Colors.red,
+                            size: 20,
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ),
+                 
+                       SizedBox(
+                      height: 5,
+                    ),
+                    InkWell(
+                      onTap: (){
+                        Navigator.pushNamed(context, "favoris");
+                      },
+                      child: ListTile(
+                        title: Text(
+                          "Mes Favoris",
+                          style: TextStyle(
+                             color: Colors.black,
+                            fontSize: 12,
+                          ),
+                        ),
+                        leading: IconButton(
+                          icon: FaIcon(
+                            FontAwesomeIcons.star,
+                            color: Colors.red,
+                            size: 20,
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ),
+                  
+                    // ListTile(
+                    //   title: Text(
+                    //     "Partager un amis",
+                    //     style: TextStyle(
+                    //       color: Colors.white,
+                    //       fontSize: 12,
+                    //     ),
+                    //   ),
+                    //   leading: IconButton(
+                    //       icon: Icon(
+                    //         Icons.person_add,
+                    //         size: 20,
+                    //         color: Colors.red,
+                    //       ),
+                    //       onPressed: () {}),
+                    // ),
+                    
+                    ListTile(
+                      onTap: ()=>Navigator.of(context).pushNamed("connex"),
+                      title: Text(
+                        "Deconexion",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                        ),
+                      ),
+                      leading: IconButton(
+                          icon: Icon(
+                            Icons.power_settings_new,
+                            size: 20,
+                            color: Colors.red,
+                          ),
+                          onPressed: () {}),
+                    ),
+                  //   ListTile(
+                  //     title: Text(
+                  //       "A propos",
+                  //       style: TextStyle(
+                  //         color: Colors.white,
+                  //         fontSize: 12,
+                  //       ),
+                  //     ),
+                  //     leading: IconButton(
+                  //         icon: Icon(
+                  //           Icons.inbox,
+                  //           size: 20,
+                  //           color: Colors.red,
+                  //         ),
+                  //         onPressed: () {}),
+                  //   ),
+                  // 
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

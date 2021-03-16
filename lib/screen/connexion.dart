@@ -16,7 +16,7 @@ class _ConnexionState extends State<Connexion> {
      final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: SingleChildScrollView(
+      body: Container(
         child: Form(
           key: _formKey,
           child: Container(
@@ -25,43 +25,23 @@ class _ConnexionState extends State<Connexion> {
                 children: <Widget>[
                  SizedBox(height: deviceHeight/20, ),
                      Container(
-                       height: deviceHeight/2, 
+                       height: deviceHeight/2.5, 
                        decoration: BoxDecoration(    
                         
-                         image:DecorationImage(image: AssetImage("images/5.png"), fit: BoxFit.cover)
+                         image:DecorationImage(image: AssetImage("images/9C4G.gif"), fit: BoxFit.cover)
                        ),
                      ),
-                     SizedBox(height: deviceHeight/300, ),
+                    
                  Container(
-                     child: Text("A widget that controls where",
+                     child: Text("Geolocalisation",
                      style: TextStyle(
+                        color: Colors.redAccent[700],
                        fontWeight: FontWeight.bold,
-                       fontSize: 20
+                       fontSize: 30
                      ),
                      ),
                    ),
-                    Container(
-                     child: Text("A widget that controls",
-                     style: TextStyle(
- 
-                     ),
-                     ),
-                   ),
-                     Container(
-                     child: Text("A widget that controls that controls where",
-                     style: TextStyle(
- 
-                     ),
-                     ),
-                   ),
-                      Container(
-                     child: Text("A widget that controls that controls where",
-                     style: TextStyle(
- 
-                     ),
-                     ),
-                   ),
-                   SizedBox(height: 10,),
+                 SizedBox(height: 10),
                   Column(
                     children: <Widget>[  
                       Row(
@@ -72,8 +52,13 @@ class _ConnexionState extends State<Connexion> {
           width: MediaQuery.of(context).size.width / 1.2,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: Colors.purple.shade50, 
-              borderRadius: BorderRadius.circular(15)),
+            border: Border.all(
+               color: Colors.redAccent[700],
+               width: 1,
+                
+            ),
+              //color: Colors.purple.shade50, 
+              borderRadius: BorderRadius.circular(5)),
           child: TextFormField(
             controller: emailController,
             decoration: InputDecoration(
@@ -107,16 +92,15 @@ class _ConnexionState extends State<Connexion> {
                                      width: MediaQuery.of(context).size.width / 1.2,
                                      alignment: Alignment.center,
                                      decoration: BoxDecoration(
-                                         color: Colors.purple.shade50,
-                                         borderRadius: BorderRadius.circular(15)),
-                                     child: TextFormField(
-                                       
+                                        border: Border.all(
+                                        color: Colors.redAccent[700],
+                                       width: 1,               
+                                          ),
+                                         borderRadius: BorderRadius.circular(5)),
+                                     child: TextFormField(   
                                        controller: passwordController,
                                        decoration: InputDecoration(
-                                      
-                                 
                                          border: InputBorder.none,
-                                         
                                          hintText: "Mot de pass",
                                          contentPadding: EdgeInsets.only(left: 10),
                                          hintStyle: TextStyle(
@@ -191,13 +175,13 @@ class _ConnexionState extends State<Connexion> {
                          width: 250,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                         color: Colors.purple.shade900
+                          color: Colors.redAccent[700],
                         ),
                         child: isLoading
                             ? CircularProgressIndicator()
                             : InkWell(
                                 onTap: () {
-                                 Navigator.of(context).pushNamed("home");
+                                 Navigator.of(context).pushNamed("Lehome");
                               
                                   }
                                 ,

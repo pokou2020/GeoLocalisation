@@ -1,4 +1,4 @@
-name: localisation
+name: geolocalisationApp
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -25,12 +25,20 @@ dependencies:
     sdk: flutter
   provider: ^4.3.3
   hidden_drawer_menu: ^2.0.1
+  font_awesome_flutter: ^8.11.0
+  #firebase_admob: ^0.9.0+1
+  firebase_core:
+  firebase_database:
+  firebase_auth: ^0.16.1
+  flutter_spinkit: ^4.1.2+1
+  google_maps_flutter:
+  geolocator:
+
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
-  device_preview: ^0.5.5
 
 dev_dependencies:
   flutter_test:
@@ -50,7 +58,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/
-    
+   
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

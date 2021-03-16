@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "823909457492",
+    "project_id": "geolocalisationapp-eb7f7",
+    "storage_bucket": "geolocalisationapp-eb7f7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:823909457492:android:5dfe71b5341699ed08d7c1",
+        "android_client_info": {
+          "package_name": "com.example.geolocalisationApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "823909457492-v49ahvld6tludu7qtvmpdnkb5pbbptlk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7BCyl5ua8Irsgf8BF5ADvIrioO4ibavo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "823909457492-v49ahvld6tludu7qtvmpdnkb5pbbptlk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

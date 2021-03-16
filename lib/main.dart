@@ -1,38 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:localisation/provider/ProviderElement.dart';
-import 'package:localisation/screen/connexion.dart';
-import 'package:localisation/screen/home.dart';
-import 'package:localisation/widget/essai.dart';
+import 'package:geolocalisationApp/provider/ProviderElement.dart';
+import 'package:geolocalisationApp/screen/Lehome.dart';
+import 'package:geolocalisationApp/screen/connexion.dart';
+import 'package:geolocalisationApp/screen/home.dart';
+import 'package:geolocalisationApp/widget/drawer.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(DevicePreview(child: MyApp()));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    
     return MultiProvider(
-      providers: [
+       providers: [
         ChangeNotifierProvider.value(value: ElementProvider())
       ],
-      child:  MaterialApp(
-        builder: (DevicePreview.appBuilder;
+        child:  MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
- 
+
         primarySwatch: Colors.blue,
- 
+
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Connexion(),
       routes: {
-        "home":(context)=>Home(),
+        "Lehome":(context)=>Lehome(),
       },
     ),
-      );
-   
+    );
   }
 }
 

@@ -1,0 +1,8 @@
+-A l'arrivee de l'utilisateur dans une ville on le notifie qu'il est dans la ville 
+-deh qu'il rentre dans l'appli on lui affiche la ville ou la commune dans laquelle il est
+- la zone ou il se trouve le quartier
+-Ensuite le lieu le plus proche de sa position actuelle
+-et les autre lieu a proximite
+-il pourra aussi faire des reservations a distance(avoir des contact avec different structure)
+- faire des recherches sur une ville
+-
